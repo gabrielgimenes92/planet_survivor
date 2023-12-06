@@ -10,7 +10,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rot = rot + 90
         self.image = pygame.image.load('graphics/bullet.png').convert_alpha()
         self.rect = self.image.get_rect(center=(self.x, self.y))
-        print("Bullet created")
+        # print("Bullet created")
 
     def fire(self):
         radians = math.radians(self.rot)
@@ -25,7 +25,7 @@ class Bullet(pygame.sprite.Sprite):
 
     def destroy(self):
         if self.x >= 1000 or self.x <= -1000:
-            print("Bullet destroyed")
+            # print("Bullet destroyed")
             self.kill()
 
     def update(self):
