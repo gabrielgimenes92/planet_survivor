@@ -9,27 +9,39 @@ screen = pygame.display.set_mode((600, 800))
 pygame.display.set_caption('Planet Survivor')
 clock = pygame.time.Clock()
 game_active = True
+test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 
 sky_surface = pygame.image.load('graphics/sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
 station = pygame.sprite.GroupSingle()
 station.add(Station(screen, 0))
 
+
 bullet_group = pygame.sprite.Group()
 
 enemy_group = pygame.sprite.Group()
 
 obstacle_timer = pygame.USEREVENT + 1
-pygame.time.set_timer(obstacle_timer, 1000)
+pygame.time.set_timer(obstacle_timer, 100)
 
 obstacle_timer2 = pygame.USEREVENT + 2
 pygame.time.set_timer(obstacle_timer2, 1500)
 
+score = 0
+# score_surf = test_font.render(f'Score: {score}', False, (64, 64, 64))
+# score_rect = score_surf.get_rect(center=(300, 400))
 
-def collision_sprite():
+
+def display_score(score):
+    score_surf = test_font.render(f'Score: {score}', False, (64, 64, 64))
+    score_rect = score_surf.get_rect(center=(300, 50))
+    screen.blit(score_surf, score_rect)
+
+
+def collision_sprite(score):
     if pygame.sprite.groupcollide(bullet_group, enemy_group, False, True):
-        # enemy_group.empty()
-        print("hit")
+        score += 1
+    return score
 
 
 while True:
@@ -54,7 +66,8 @@ while True:
         bullet_group.update()
         enemy_group.draw(screen)
         enemy_group.update()
-        collision_sprite()
+        score = collision_sprite(score)
+        display_score(score)
 
     pygame.display.update()
     clock.tick(60)
