@@ -12,8 +12,8 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(midbottom=(self.pos_x, self.pos_y))
         # print("Creating enemy")
 
-    def movement(self):
-        self.pos_y += 1
+    def movement(self, speed):
+        self.pos_y += speed
         self.rect = self.image.get_rect(midbottom=(self.pos_x, self.pos_y))
         # print("Moving enemy")
 
@@ -21,6 +21,6 @@ class Enemy(pygame.sprite.Sprite):
         if self.pos_y >= 690:
             self.kill()
 
-    def update(self):
-        self.movement()
+    def update(self, speed):
+        self.movement(speed)
         self.destroy()
