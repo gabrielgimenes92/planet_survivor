@@ -13,6 +13,9 @@ test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 
 sky_surface = pygame.image.load('graphics/sky.png').convert()
 ground_surface = pygame.image.load('graphics/ground.png').convert()
+ship_surf = pygame.image.load('graphics/ship/ship_merged.png').convert_alpha()
+ship_rect = ship_surf.get_rect(midbottom=(300, 700))
+
 station = pygame.sprite.GroupSingle()
 station.add(Station(screen, 0))
 
@@ -22,7 +25,7 @@ bullet_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 
 obstacle_timer = pygame.USEREVENT + 1
-pygame.time.set_timer(obstacle_timer, 100)
+pygame.time.set_timer(obstacle_timer, 400)
 
 obstacle_timer2 = pygame.USEREVENT + 2
 pygame.time.set_timer(obstacle_timer2, 1500)
@@ -66,6 +69,7 @@ while True:
         bullet_group.update()
         enemy_group.draw(screen)
         enemy_group.update()
+        screen.blit(ship_surf, ship_rect)
         score = collision_sprite(score)
         display_score(score)
 
