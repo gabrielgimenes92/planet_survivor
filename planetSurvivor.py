@@ -1,6 +1,7 @@
 import pygame
 from sys import exit
 from station import Station
+from ground import Ground
 from bullet import Bullet
 from enemy import Enemy
 
@@ -17,13 +18,19 @@ sky_red_surf = pygame.image.load(
 
 alpha = 0
 sky_red_surf.set_alpha(alpha)
-ground_surf = pygame.image.load('graphics/ground.png').convert_alpha()
+# ground_surf = pygame.image.load('graphics/ground.png').convert_alpha()
+# ground_rect = ground_surf.get_rect(center=(0, 672))
 ship_surf = pygame.image.load('graphics/ship/ship_merged.png').convert_alpha()
 ship_rect = ship_surf.get_rect(midbottom=(300, 700))
 
 station = pygame.sprite.GroupSingle()
 station.add(Station(screen, 0))
+lives = int(3)
+# print(type(lives))
 
+ground = pygame.sprite.GroupSingle()
+ground.add(Ground())
+# print(type(ground))
 
 bullet_group = pygame.sprite.Group()
 
@@ -54,10 +61,44 @@ def display_score(score):
     screen.blit(score_surf, score_rect)
 
 
+def display_lives():
+    global lives
+    single_life_surf = pygame.transform.scale2x(pygame.image.load(
+        'graphics/player/life.png').convert_alpha())
+    single_life_gray_surf = pygame.transform.scale2x(pygame.image.load(
+        'graphics/player/life_grayed.png').convert_alpha())
+    if lives == 3:
+        screen.blit(single_life_surf, (10, 10))
+        screen.blit(single_life_surf, (45, 10))
+        screen.blit(single_life_surf, (80, 10))
+    if lives == 2:
+        screen.blit(single_life_surf, (10, 10))
+        screen.blit(single_life_surf, (45, 10))
+        screen.blit(single_life_gray_surf, (80, 10))
+    if lives == 1:
+        screen.blit(single_life_surf, (10, 10))
+        screen.blit(single_life_gray_surf, (45, 10))
+        screen.blit(single_life_gray_surf, (80, 10))
+    if lives == 0:
+        game_over()
+    # else:
+        # return print("error")
+
+
 def collision_sprite(score):
     if pygame.sprite.groupcollide(bullet_group, enemy_group, False, True):
         score += 1
     return score
+
+
+def collision_ground():
+    global lives
+    if pygame.sprite.groupcollide(ground, enemy_group, False, True):
+        lives -= 1
+
+
+def game_over():
+    return
 
 
 while True:
@@ -71,7 +112,7 @@ while True:
                 bullet_group.add(Bullet(screen, station.sprite.rot))
                 alpha += 1
                 enemy_speed += 0.01
-                print(enemy_speed)
+                # print(enemy_speed)
                 # increase_dificulty(alpha, enemy_speed)
                 sky_red_surf.set_alpha(alpha)
 
@@ -81,15 +122,17 @@ while True:
     if game_active:
         screen.blit(sky_surf, (0, 0))
         screen.blit(sky_red_surf, (0, 0))
-        screen.blit(ground_surf, (0, 672))
+        display_lives()
         station.draw(screen)
         station.update()
         bullet_group.draw(screen)
         bullet_group.update()
+        ground.draw(screen)
         enemy_group.draw(screen)
         enemy_group.update(enemy_speed)
         screen.blit(ship_surf, ship_rect)
         score = collision_sprite(score)
+        collision_ground()
         display_score(score)
 
     pygame.display.update()

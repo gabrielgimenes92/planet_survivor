@@ -18,7 +18,7 @@ class Enemy(pygame.sprite.Sprite):
         # print("Moving enemy")
 
     def destroy(self):
-        if self.pos_y >= 690:
+        if self.pos_y >= 750:
             self.kill()
 
     def update(self, speed):

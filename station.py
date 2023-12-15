@@ -16,6 +16,7 @@ class Station(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(300, 685))
         self.rot = rot
         self.rot_speed = 1
+        self.lives = 2
 
     def station_input(self):
         keys = pygame.key.get_pressed()
