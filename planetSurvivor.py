@@ -10,6 +10,8 @@ screen = pygame.display.set_mode((600, 800))
 pygame.display.set_caption('Planet Survivor')
 clock = pygame.time.Clock()
 game_active = True
+global game_over
+game_over = False
 test_font = pygame.font.Font('font/Pixeltype.ttf', 50)
 
 sky_surf = pygame.image.load('graphics/sky.png').convert_alpha()
@@ -24,6 +26,7 @@ ship_rect = ship_surf.get_rect(midbottom=(300, 700))
 station = pygame.sprite.GroupSingle()
 station.add(Station(screen, 0))
 lives = int(3)
+
 
 ground = pygame.sprite.GroupSingle()
 ground.add(Ground())
@@ -73,7 +76,7 @@ def display_lives():
         screen.blit(single_life_gray_surf, (45, 10))
         screen.blit(single_life_gray_surf, (80, 10))
     if lives == 0:
-        game_over()
+        game_over_func()
 
 
 def collision_sprite(score):
@@ -88,7 +91,9 @@ def collision_ground():
         lives -= 1
 
 
-def game_over():
+def game_over_func():
+    global game_over
+    game_over = True
     return
 
 
@@ -110,20 +115,25 @@ while True:
                 enemy_group.add(Enemy(screen))
 
     if game_active:
-        screen.blit(sky_surf, (0, 0))
-        screen.blit(sky_red_surf, (0, 0))
-        display_lives()
-        station.draw(screen)
-        station.update()
-        bullet_group.draw(screen)
-        bullet_group.update()
-        ground.draw(screen)
-        enemy_group.draw(screen)
-        enemy_group.update(enemy_speed)
-        screen.blit(ship_surf, ship_rect)
-        score = collision_sprite(score)
-        collision_ground()
-        display_score(score)
+        if game_over == False:
+            screen.blit(sky_surf, (0, 0))
+            screen.blit(sky_red_surf, (0, 0))
+            display_lives()
+            station.draw(screen)
+            station.update()
+            bullet_group.draw(screen)
+            bullet_group.update()
+            ground.draw(screen)
+            enemy_group.draw(screen)
+            enemy_group.update(enemy_speed)
+            screen.blit(ship_surf, ship_rect)
+            score = collision_sprite(score)
+            collision_ground()
+            display_score(score)
+        else:
+
+            screen.blit(sky_surf, (0, 0))
+            display_score(score)
 
     pygame.display.update()
     clock.tick(60)
