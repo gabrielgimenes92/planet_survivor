@@ -6,10 +6,6 @@ class Station(pygame.sprite.Sprite):
 
     def __init__(self, screen, rot):
         super().__init__()
-        # ship_background = pygame.image.load(
-        #     'graphics/ship/ship_background.png').convert_alpha()
-        # ship_cannon = pygame.image.load(
-        #     'graphics/ship/ship_cannon.png').convert_alpha()
         ship = pygame.image.load(
             'graphics/ship/ship_cannon.png').convert_alpha()
         self.image = ship
@@ -40,13 +36,6 @@ class Station(pygame.sprite.Sprite):
 
         if keys[pygame.K_SPACE] and self.rot_speed <= 3:
             self.rot_speed += 0.1
-            # print(self.rot_speed)
-
-        # if keys[pygame.K_f]:
-        #     self.fire()
-
-    # def get_rot(self):
-    #     return self.rot
 
     def update(self):
         self.station_input()

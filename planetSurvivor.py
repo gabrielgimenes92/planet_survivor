@@ -18,19 +18,15 @@ sky_red_surf = pygame.image.load(
 
 alpha = 0
 sky_red_surf.set_alpha(alpha)
-# ground_surf = pygame.image.load('graphics/ground.png').convert_alpha()
-# ground_rect = ground_surf.get_rect(center=(0, 672))
 ship_surf = pygame.image.load('graphics/ship/ship_merged.png').convert_alpha()
 ship_rect = ship_surf.get_rect(midbottom=(300, 700))
 
 station = pygame.sprite.GroupSingle()
 station.add(Station(screen, 0))
 lives = int(3)
-# print(type(lives))
 
 ground = pygame.sprite.GroupSingle()
 ground.add(Ground())
-# print(type(ground))
 
 bullet_group = pygame.sprite.Group()
 
@@ -44,9 +40,6 @@ obstacle_timer2 = pygame.USEREVENT + 2
 pygame.time.set_timer(obstacle_timer2, 1500)
 
 score = 0
-# score_surf = test_font.render(f'Score: {score}', False, (64, 64, 64))
-# score_rect = score_surf.get_rect(center=(300, 400))
-
 
 # def increase_dificulty(alpha, enemy_speed):
 #     alpha += 10
@@ -81,8 +74,6 @@ def display_lives():
         screen.blit(single_life_gray_surf, (80, 10))
     if lives == 0:
         game_over()
-    # else:
-        # return print("error")
 
 
 def collision_sprite(score):
@@ -112,7 +103,6 @@ while True:
                 bullet_group.add(Bullet(screen, station.sprite.rot))
                 alpha += 1
                 enemy_speed += 0.01
-                # print(enemy_speed)
                 # increase_dificulty(alpha, enemy_speed)
                 sky_red_surf.set_alpha(alpha)
 
