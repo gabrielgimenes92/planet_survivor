@@ -27,7 +27,6 @@ station = pygame.sprite.GroupSingle()
 station.add(Station(screen, 0))
 lives = int(3)
 
-
 ground = pygame.sprite.GroupSingle()
 ground.add(Ground())
 
@@ -51,9 +50,9 @@ score = 0
 #     print(alpha, enemy_speed)
 
 
-def display_score(score):
-    score_surf = test_font.render(f'Score: {score}', False, (64, 64, 64))
-    score_rect = score_surf.get_rect(center=(300, 50))
+def display_score(score, message, position):
+    score_surf = test_font.render(f'{message}{score}', False, (64, 64, 64))
+    score_rect = score_surf.get_rect(center=(position))
     screen.blit(score_surf, score_rect)
 
 
@@ -61,20 +60,26 @@ def display_lives():
     global lives
     single_life_surf = pygame.transform.scale2x(pygame.image.load(
         'graphics/player/life.png').convert_alpha())
-    single_life_gray_surf = pygame.transform.scale2x(pygame.image.load(
-        'graphics/player/life_grayed.png').convert_alpha())
+    single_life_gray_surf = pygame.transform.scale(pygame.image.load(
+        'graphics/player/life_grayed.png').convert_alpha(), (25, 25))
+    pos_one_rect = single_life_surf.get_rect(center=(20, 20))
+    pos_two_rect = single_life_surf.get_rect(center=(55, 20))
+    pos_three_rect = single_life_surf.get_rect(center=(90, 20))
+    pos_two_gray_rect = single_life_gray_surf.get_rect(center=(55, 20))
+    pos_three_gray_rect = single_life_gray_surf.get_rect(center=(90, 20))
+
     if lives == 3:
-        screen.blit(single_life_surf, (10, 10))
-        screen.blit(single_life_surf, (45, 10))
-        screen.blit(single_life_surf, (80, 10))
+        screen.blit(single_life_surf, pos_one_rect)
+        screen.blit(single_life_surf, pos_two_rect)
+        screen.blit(single_life_surf, pos_three_rect)
     if lives == 2:
-        screen.blit(single_life_surf, (10, 10))
-        screen.blit(single_life_surf, (45, 10))
-        screen.blit(single_life_gray_surf, (80, 10))
+        screen.blit(single_life_surf, pos_one_rect)
+        screen.blit(single_life_surf, pos_two_rect)
+        screen.blit(single_life_gray_surf, pos_three_gray_rect)
     if lives == 1:
-        screen.blit(single_life_surf, (10, 10))
-        screen.blit(single_life_gray_surf, (45, 10))
-        screen.blit(single_life_gray_surf, (80, 10))
+        screen.blit(single_life_surf, pos_one_rect)
+        screen.blit(single_life_gray_surf, pos_two_gray_rect)
+        screen.blit(single_life_gray_surf, pos_three_gray_rect)
     if lives == 0:
         game_over_func()
 
@@ -106,8 +111,8 @@ while True:
         if game_active:
             if event.type == obstacle_timer:
                 bullet_group.add(Bullet(screen, station.sprite.rot))
-                alpha += 1
-                enemy_speed += 0.01
+                alpha += 2
+                enemy_speed += 0.02
                 # increase_dificulty(alpha, enemy_speed)
                 sky_red_surf.set_alpha(alpha)
 
@@ -129,11 +134,18 @@ while True:
             screen.blit(ship_surf, ship_rect)
             score = collision_sprite(score)
             collision_ground()
-            display_score(score)
+            display_score(score, "Score: ", (300, 50))
         else:
-
             screen.blit(sky_surf, (0, 0))
-            display_score(score)
+            display_score(score, "", (300, 250))
+            score_surf = test_font.render(
+                f'Oh no, you lost.', False, (64, 64, 64))
+            score_rect = score_surf.get_rect(center=(300, 175))
+            screen.blit(score_surf, score_rect)
+            score_surf = test_font.render(
+                f'Here is your final score:', False, (64, 64, 64))
+            score_rect = score_surf.get_rect(center=(300, 205))
+            screen.blit(score_surf, score_rect)
 
     pygame.display.update()
     clock.tick(60)
